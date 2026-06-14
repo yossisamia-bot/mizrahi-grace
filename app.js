@@ -194,11 +194,23 @@ const $ = id => document.getElementById(id);
 const pad1 = makePad($('sig1'));
 let pad2 = null;
 
-$('addB2').onclick = ()=>{ $('b2wrap').classList.remove('hide'); $('sig2wrap').classList.remove('hide');
+function showSecondOwner(focusName){
+  $('b2wrap').classList.remove('hide'); $('sig2wrap').classList.remove('hide');
   $('addB2').classList.add('hide'); $('rmB2').classList.remove('hide');
-  if(!pad2) pad2 = makePad($('sig2')); updateSigLabels(); };
-$('rmB2').onclick = ()=>{ $('b2wrap').classList.add('hide'); $('sig2wrap').classList.add('hide');
-  $('addB2').classList.remove('hide'); $('rmB2').classList.add('hide'); updateSigLabels(); };
+  $('addSignerSig').classList.add('hide');
+  if(!pad2) pad2 = makePad($('sig2'));
+  updateSigLabels();
+  if(focusName){ const el=$('b2_firstname'); el.scrollIntoView({behavior:'smooth', block:'center'}); setTimeout(()=>el.focus(), 350); }
+}
+function hideSecondOwner(){
+  $('b2wrap').classList.add('hide'); $('sig2wrap').classList.add('hide');
+  $('addB2').classList.remove('hide'); $('rmB2').classList.add('hide');
+  $('addSignerSig').classList.remove('hide');
+  updateSigLabels();
+}
+$('addB2').onclick = ()=> showSecondOwner(false);
+$('rmB2').onclick = ()=> hideSecondOwner();
+$('addSignerSig').onclick = ()=> showSecondOwner(true);
 document.querySelectorAll('[data-clear]').forEach(btn=> btn.onclick = ()=>{
   (btn.dataset.clear==='sig1'?pad1:pad2)?.clear(); });
 
