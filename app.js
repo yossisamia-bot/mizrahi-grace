@@ -196,9 +196,9 @@ let pad2 = null;
 
 $('addB2').onclick = ()=>{ $('b2wrap').classList.remove('hide'); $('sig2wrap').classList.remove('hide');
   $('addB2').classList.add('hide'); $('rmB2').classList.remove('hide');
-  if(!pad2) pad2 = makePad($('sig2')); };
+  if(!pad2) pad2 = makePad($('sig2')); updateSigLabels(); };
 $('rmB2').onclick = ()=>{ $('b2wrap').classList.add('hide'); $('sig2wrap').classList.add('hide');
-  $('addB2').classList.remove('hide'); $('rmB2').classList.add('hide'); };
+  $('addB2').classList.remove('hide'); $('rmB2').classList.add('hide'); updateSigLabels(); };
 document.querySelectorAll('[data-clear]').forEach(btn=> btn.onclick = ()=>{
   (btn.dataset.clear==='sig1'?pad1:pad2)?.clear(); });
 
@@ -207,6 +207,16 @@ function todayStr(){ const d=new Date();
   return `${p(d.getDate())}/${p(d.getMonth()+1)}/${d.getFullYear()}`; }
 
 function val(id){ return ($(id).value||'').trim(); }
+
+// תוויות החתימה נושאות את שם בעל/ת המשכנתא, כדי שיהיה ברור למי כל תא חתימה (במיוחד כששניים)
+function updateSigLabels(){
+  const n1 = [val('b1_firstname'), val('b1_lastname')].filter(Boolean).join(' ');
+  $('sig1_label').textContent = n1 ? `חתימת ${n1}` : 'חתימת בעל/ת המשכנתא';
+  const n2 = [val('b2_firstname'), val('b2_lastname')].filter(Boolean).join(' ');
+  $('sig2_label').textContent = n2 ? `חתימת ${n2}` : 'חתימת בעל/ת המשכנתא השני/ה';
+}
+['b1_firstname','b1_lastname','b2_firstname','b2_lastname'].forEach(id=> $(id).addEventListener('input', updateSigLabels));
+updateSigLabels();
 
 let lastBytes=null;
 function download(bytes){
