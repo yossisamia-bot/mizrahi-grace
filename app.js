@@ -9,7 +9,9 @@ const PAGE_H = 842;
 
 // --- מפת השדות (מראה את fields.py). rect = [x0,y0,x1,y1] בקואורדינטות top-down של PyMuPDF ---
 const F = {
-  date_top:     { p:0, r:[450,22,532,33],  t:'num', a:'right'  },
+  date_day:     { p:0, r:[438,22,452,33],  t:'num', a:'center' },
+  date_month:   { p:0, r:[464,22,479,33],  t:'num', a:'center' },
+  date_year:    { p:0, r:[490,22,516,33],  t:'num', a:'center' },
   b1_lastname:  { p:0, r:[429,535,548,547], t:'heb', a:'right'  },
   b1_firstname: { p:0, r:[300,535,419,547], t:'heb', a:'right'  },
   b1_id:        { p:0, r:[171,535,289,547], t:'num', a:'right'  },
@@ -28,9 +30,11 @@ const F = {
   reason_l1:    { p:0, r:[80,723,555,734],  t:'heb', a:'right'  },
   reason_l2:    { p:0, r:[80,735,555,746],  t:'heb', a:'right'  },
   reason_l3:    { p:0, r:[80,747,555,758],  t:'heb', a:'right'  },
-  date_top_p2:  { p:1, r:[450,22,532,33],   t:'num', a:'right'  },
+  date_day_p2:  { p:1, r:[438,22,452,33],  t:'num', a:'center' },
+  date_month_p2:{ p:1, r:[464,22,479,33],  t:'num', a:'center' },
+  date_year_p2: { p:1, r:[490,22,516,33],  t:'num', a:'center' },
   billing_day:  { p:1, r:[280,622,358,635], t:'num', a:'right'  },
-  account_no:   { p:1, r:[275,641,353,654], t:'num', a:'right'  },
+  account_no:   { p:1, r:[275,638,353,651], t:'num', a:'right'  },
   sig1_name:    { p:1, r:[417,701,554,713], t:'heb', a:'right'  },
   sig1_sign:    { p:1, r:[305,700,406,713], t:'sig', a:'center' },
   sig1_date:    { p:1, r:[176,701,295,713], t:'num', a:'right'  },
@@ -101,9 +105,10 @@ async function buildPdf(data){
     page.drawText(val, { x, y: PAGE_H - yTop, size, font, color: rgb(0,0,0) });
   };
 
-  // תאריך (שני העמודים)
-  draw('date_top', data.date, 8.5);
-  draw('date_top_p2', data.date, 8.5);
+  // תאריך (שני העמודים) -> יום/חודש/שנה בתאים נפרדים
+  const [dd, mm, yy] = (data.date || '').split('/');
+  draw('date_day', dd, 8.5); draw('date_month', mm, 8.5); draw('date_year', yy, 8.5);
+  draw('date_day_p2', dd, 8.5); draw('date_month_p2', mm, 8.5); draw('date_year_p2', yy, 8.5);
 
   // לווים + שורות חתימה
   for(let i=0;i<data.borrowers.length && i<2;i++){
