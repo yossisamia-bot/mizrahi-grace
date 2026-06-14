@@ -40,19 +40,29 @@
   .err{ color:#b3261e; font-size:13px; margin-top:8px; min-height:1px; }
   .done{ display:none; text-align:center; }
   .done.show{ display:block; }
-  .done .check{ font-size:42px; color:var(--ok); }
+  .done .check{ font-size:54px; color:var(--ok); line-height:1; }
+  .done .doneTitle{ font-size:24px; color:var(--ok); margin:6px 0 6px; }
+  .done .doneLead{ font-size:16px; margin:0 0 14px; color:var(--ink); }
+  .done .stepline{ text-align:right; font-size:15px; line-height:1.55; margin:11px 2px; color:var(--ink); }
   .done .sendbox{ background:#eef7f1; border:1px solid #bfe3cd; border-radius:10px; padding:14px 12px; margin:12px 0; font-size:14px; }
-  .done .email{ font-weight:700; color:var(--blue); font-size:18px; direction:ltr; cursor:pointer;
-    display:inline-flex; align-items:center; gap:9px; font-family:inherit;
-    background:#fff; border:1px solid #bfe3cd; border-radius:9px; padding:9px 14px; margin:8px 0 2px; }
-  .done .email:hover{ background:#f3faf5; border-color:#8fd0a8; }
+  .done .email{ font-weight:700; color:var(--blue); font-size:27px; direction:ltr; cursor:pointer;
+    display:inline-flex; align-items:center; gap:12px; font-family:inherit; max-width:100%;
+    background:#fff; border:2px solid #8fd0a8; border-radius:11px; padding:15px 20px; margin:10px 0 4px; }
+  .done .email:hover{ background:#f3faf5; border-color:#5cb47f; }
   .done .email:active{ transform:translateY(1px); }
-  .done .email .copyicon{ font-size:15px; }
+  .done .email .copyicon{ font-size:21px; }
   .done .taphint{ display:block; font-size:12px; color:var(--muted); margin:0 0 4px; }
-  .done .copied{ display:none; color:var(--ok); font-size:13.5px; font-weight:600; margin:4px 0 2px; }
+  .done .copied{ display:none; color:var(--ok); font-size:15px; font-weight:700; margin:6px 0 2px; }
   .done .copied.show{ display:block; }
   .hide{ display:none; }
   .req::after{ content:" *"; color:#b3261e; }
+  .addowner{ display:block; width:100%; padding:14px; margin-top:8px; border:2px dashed var(--blue);
+    border-radius:10px; background:#eaf2fb; color:var(--blue); font-size:16px; font-weight:700;
+    font-family:inherit; cursor:pointer; text-align:center; }
+  .addowner:hover{ background:#dbe9fa; }
+  .addowner:active{ transform:translateY(1px); }
+  .addreminder{ border:1px solid #cfe0f3; background:#f3f8fd; }
+  .addreminder p{ margin:0 0 10px; font-size:14px; color:var(--ink); }
 </style>
 </head>
 <body>
@@ -64,10 +74,8 @@
   </header>
 
   <div class="note">
-    הכנו לכם את העמוד הקטן הזה כדי לחסוך לכם את ההתעסקות מול הטופס של הבנק 🙂
-    הוא פשוט מכין עבורכם את הבקשה הרשמית של מזרחי - ממלאים פה בכמה דקות, מורידים את ה-PDF,
-    <b>ושולחים אותו בעצמכם</b> מהמייל שלכם ישר לבנק. אנחנו רק הצינור שמייצר לכם את המסמך;
-    הפרטים נשארים על המכשיר שלכם בלבד ולא נשלחים לאף שרת.
+    הכנו לכם את העמוד הזה כדי שיהיה קל מול הטופס של מזרחי 🙂 ממלאים, חותמים,
+    ומורידים PDF מוכן <b>שתשלחו בעצמכם</b> לבנק. הכל נשאר במכשיר שלכם ולא עובר דרך שום שרת.
   </div>
 
   <form id="f" autocomplete="off">
@@ -91,7 +99,7 @@
         </div>
         <label>תעודת זהות (לווה 2)</label><input type="tel" id="b2_id" inputmode="numeric" maxlength="9">
       </div>
-      <button type="button" class="ghost" id="addB2" style="width:100%;margin-top:8px;">+ הוסף בעל/ת משכנתא נוסף/ת</button>
+      <button type="button" class="addowner" id="addB2">+ הוסף בעל/ת משכנתא נוסף/ת</button>
       <button type="button" class="linklike hide" id="rmB2">- הסר בעל/ת משכנתא נוסף/ת</button>
     </div>
 
@@ -164,7 +172,11 @@
         <canvas class="sigbox" id="sig2"></canvas>
         <div class="sigrow"><span class="hint">חתמו במסגרת</span><button type="button" class="linklike" data-clear="sig2">נקה חתימה</button></div>
       </div>
-      <button type="button" class="ghost" id="addSignerSig" style="width:100%;margin-top:10px;">+ צריך עוד חותם/ת? הוסיפו בעל/ת משכנתא</button>
+    </div>
+
+    <div class="card addreminder" id="addReminder">
+      <p>חתם/ה רק אחד/ת? <b>אם המשכנתא על שם יותר מאדם אחד</b> - הוסיפו כאן את הבעלים הנוסף/ת כדי שגם הוא/היא יחתום/תחתום, לפני שממשיכים.</p>
+      <button type="button" class="addowner" id="addSigner2">+ הוסף בעל/ת משכנתא וחתימה</button>
     </div>
 
     <div class="err" id="err"></div>
@@ -173,19 +185,19 @@
 
   <div class="done card" id="done">
     <div class="check">✓</div>
-    <h2 style="color:var(--ok)">הטופס מוכן!</h2>
-    <p>הקובץ ירד למכשיר. עכשיו שלחו אותו <b>מהמייל שלכם</b> אל הבנק:</p>
+    <h2 class="doneTitle">הקובץ ירד למכשיר שלכם!</h2>
+    <p class="doneLead">נשאר רק לשלוח אותו לבנק מהמייל שלכם:</p>
     <div class="sendbox">
-      שלחו את הקובץ אל:<br>
+      <div class="stepline"><b>1.</b> העתיקו את כתובת הבנק - לחיצה על הכתובת מעתיקה אותה:</div>
       <button type="button" class="email" id="copyEmail" title="לחצו להעתקת הכתובת">
         <span id="emailText">grace@umtb.co.il</span>
         <span class="copyicon" aria-hidden="true">📋</span>
       </button>
-      <span class="taphint">לחצו על הכתובת כדי להעתיק אותה</span>
       <div class="copied" id="copied"></div>
-      <span class="hint">(הכתובת גם מודפסת בראש הטופס. הבנק ישלח אישור במייל חוזר.)</span>
+      <div class="stepline"><b>2.</b> פתחו את המייל, צרפו את הקובץ שירד, והדביקו את הכתובת בשדה "אל".</div>
+      <div class="stepline"><b>3.</b> שלחו - והבנק יחזיר לכם אישור במייל.</div>
     </div>
-    <button type="button" class="ghost" id="dl2">הורד שוב</button>
+    <button type="button" class="ghost" id="dl2">הורד שוב את הקובץ</button>
     <button type="button" class="ghost" id="again">מילוי טופס חדש</button>
   </div>
 

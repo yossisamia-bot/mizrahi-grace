@@ -197,7 +197,7 @@ let pad2 = null;
 function showSecondOwner(focusName){
   $('b2wrap').classList.remove('hide'); $('sig2wrap').classList.remove('hide');
   $('addB2').classList.add('hide'); $('rmB2').classList.remove('hide');
-  $('addSignerSig').classList.add('hide');
+  $('addReminder').classList.add('hide');
   if(!pad2) pad2 = makePad($('sig2'));
   updateSigLabels();
   if(focusName){ const el=$('b2_firstname'); el.scrollIntoView({behavior:'smooth', block:'center'}); setTimeout(()=>el.focus(), 350); }
@@ -205,12 +205,12 @@ function showSecondOwner(focusName){
 function hideSecondOwner(){
   $('b2wrap').classList.add('hide'); $('sig2wrap').classList.add('hide');
   $('addB2').classList.remove('hide'); $('rmB2').classList.add('hide');
-  $('addSignerSig').classList.remove('hide');
+  $('addReminder').classList.remove('hide');
   updateSigLabels();
 }
 $('addB2').onclick = ()=> showSecondOwner(false);
 $('rmB2').onclick = ()=> hideSecondOwner();
-$('addSignerSig').onclick = ()=> showSecondOwner(true);
+$('addSigner2').onclick = ()=> showSecondOwner(true);
 document.querySelectorAll('[data-clear]').forEach(btn=> btn.onclick = ()=>{
   (btn.dataset.clear==='sig1'?pad1:pad2)?.clear(); });
 
