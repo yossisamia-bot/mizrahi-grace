@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>בקשה להארכת גרייס - מזרחי טפחות</title>
+<style>
+  :root{ --blue:#0a4d8c; --bg:#f4f6f9; --line:#d7dde6; --ink:#1d2733; --muted:#5b6675; --ok:#137a4b; }
+  *{ box-sizing:border-box; }
+  body{ margin:0; font-family:"Segoe UI",Arial,sans-serif; background:var(--bg); color:var(--ink); line-height:1.55; }
+  .wrap{ max-width:640px; margin:0 auto; padding:18px 16px 60px; }
+  header.top{ text-align:center; padding:8px 0 6px; }
+  header.top h1{ font-size:20px; margin:0 0 4px; color:var(--blue); }
+  header.top p{ margin:2px 0; color:var(--muted); font-size:13.5px; }
+  .note{ background:#fff7e6; border:1px solid #f0d28a; border-radius:10px; padding:10px 12px; font-size:13.5px; margin:12px 0; }
+  .card{ background:#fff; border:1px solid var(--line); border-radius:12px; padding:14px 14px 6px; margin:14px 0; box-shadow:0 1px 3px rgba(20,40,70,.05); }
+  .card h2{ font-size:15px; margin:0 0 10px; color:var(--blue); }
+  label{ display:block; font-size:13px; color:var(--muted); margin:8px 0 3px; }
+  input[type=text], input[type=tel], textarea, select{
+    width:100%; padding:9px 10px; border:1px solid var(--line); border-radius:8px;
+    font-size:15px; font-family:inherit; background:#fff; color:var(--ink); }
+  input:focus, textarea:focus, select:focus{ outline:none; border-color:var(--blue); box-shadow:0 0 0 3px rgba(10,77,140,.12); }
+  .row{ display:flex; gap:10px; }
+  .row > div{ flex:1; }
+  .row.thirds > div{ flex:1; }
+  .hint{ font-size:12px; color:var(--muted); margin-top:3px; }
+  fieldset{ border:1px solid var(--line); border-radius:8px; padding:8px 12px 12px; margin:6px 0; }
+  fieldset legend{ font-size:13px; color:var(--blue); padding:0 6px; }
+  .radio{ display:flex; align-items:flex-start; gap:8px; margin:8px 0; cursor:pointer; }
+  .radio input{ margin-top:4px; }
+  .radio .txt strong{ display:block; font-size:14px; }
+  .radio .txt span{ font-size:12.5px; color:var(--muted); }
+  .sigbox{ border:1px dashed #b9c4d2; border-radius:8px; background:#fcfdff; touch-action:none; width:100%; height:150px; display:block; }
+  .sigrow{ display:flex; justify-content:space-between; align-items:center; margin-top:4px; }
+  .linklike{ background:none; border:none; color:var(--blue); font-size:13px; cursor:pointer; padding:2px 0; text-decoration:underline; }
+  button.primary{ width:100%; padding:14px; border:none; border-radius:10px; background:var(--blue); color:#fff;
+    font-size:17px; font-weight:600; cursor:pointer; margin-top:8px; }
+  button.primary:disabled{ opacity:.55; cursor:default; }
+  button.ghost{ background:#eef2f7; color:var(--blue); border:1px solid var(--line); border-radius:8px; padding:9px 12px; font-size:14px; cursor:pointer; }
+  .err{ color:#b3261e; font-size:13px; margin-top:8px; min-height:1px; }
+  .done{ display:none; text-align:center; }
+  .done.show{ display:block; }
+  .done .check{ font-size:42px; color:var(--ok); }
+  .done .sendbox{ background:#eef7f1; border:1px solid #bfe3cd; border-radius:10px; padding:14px 12px; margin:12px 0; font-size:14px; }
+  .done .email{ font-weight:700; color:var(--blue); font-size:18px; direction:ltr; cursor:pointer;
+    display:inline-flex; align-items:center; gap:9px; font-family:inherit;
+    background:#fff; border:1px solid #bfe3cd; border-radius:9px; padding:9px 14px; margin:8px 0 2px; }
+  .done .email:hover{ background:#f3faf5; border-color:#8fd0a8; }
+  .done .email:active{ transform:translateY(1px); }
+  .done .email .copyicon{ font-size:15px; }
+  .done .taphint{ display:block; font-size:12px; color:var(--muted); margin:0 0 4px; }
+  .done .copied{ display:none; color:var(--ok); font-size:13.5px; font-weight:600; margin:4px 0 2px; }
+  .done .copied.show{ display:block; }
+  .hide{ display:none; }
+  .req::after{ content:" *"; color:#b3261e; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <h1>בקשה להארכת גרייס</h1>
+    <p>משכנתא בבנק מזרחי טפחות - דחיית תשלומים ללא הארכת תקופה</p>
+  </header>
+
+  <div class="note">
+    הטופס הזה ממלא עבורכם את הבקשה הרשמית של הבנק. אחרי המילוי תורידו קובץ PDF
+    <b>ותשלחו אותו בעצמכם</b> מהמייל שלכם אל הבנק. הפרטים נשארים על המכשיר שלכם בלבד -
+    שום מידע לא נשלח לאף שרת.
+  </div>
+
+  <form id="f" autocomplete="off">
+
+    <div class="card">
+      <h2>פרטי הלווים</h2>
+      <p class="hint">יש לציין את כל הלווים בהלוואה. כולם גם יחתמו בהמשך.</p>
+
+      <div data-borrower="1">
+        <div class="row">
+          <div><label class="req">שם משפחה</label><input type="text" id="b1_lastname"></div>
+          <div><label class="req">שם פרטי</label><input type="text" id="b1_firstname"></div>
+        </div>
+        <label class="req">תעודת זהות</label><input type="tel" id="b1_id" inputmode="numeric" maxlength="9">
+      </div>
+
+      <div id="b2wrap" class="hide" data-borrower="2" style="margin-top:12px;border-top:1px dashed var(--line);padding-top:8px;">
+        <div class="row">
+          <div><label>שם משפחה (לווה 2)</label><input type="text" id="b2_lastname"></div>
+          <div><label>שם פרטי (לווה 2)</label><input type="text" id="b2_firstname"></div>
+        </div>
+        <label>תעודת זהות (לווה 2)</label><input type="tel" id="b2_id" inputmode="numeric" maxlength="9">
+      </div>
+      <button type="button" class="linklike" id="addB2">+ הוסף לווה שני</button>
+      <button type="button" class="linklike hide" id="rmB2">- הסר לווה שני</button>
+    </div>
+
+    <div class="card">
+      <h2>כתובת</h2>
+      <div class="row">
+        <div><label class="req">יישוב</label><input type="text" id="city"></div>
+        <div><label>מיקוד</label><input type="tel" id="zip" inputmode="numeric"></div>
+      </div>
+      <div class="row">
+        <div style="flex:3"><label class="req">רחוב</label><input type="text" id="street"></div>
+        <div style="flex:1"><label>מס׳</label><input type="tel" id="houseno" inputmode="numeric"></div>
+      </div>
+      <div class="row">
+        <div><label class="req">טלפון</label><input type="tel" id="phone1" inputmode="tel"></div>
+        <div><label>טלפון נוסף</label><input type="tel" id="phone2" inputmode="tel"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>פרטי הבקשה</h2>
+
+      <label class="req">לכמה חודשים לדחות?</label>
+      <div class="row">
+        <div style="max-width:120px"><input type="tel" id="months" inputmode="numeric" value="12" maxlength="2"></div>
+        <div style="align-self:center"><span class="hint">עד 12 חודשים (הבנק מאשר עד שנה, לפי שיקולו).</span></div>
+      </div>
+
+      <fieldset>
+        <legend>סוג הדחייה</legend>
+        <label class="radio">
+          <input type="radio" name="deferral" value="partial" checked>
+          <span class="txt"><strong>דחייה חלקית</strong>
+            <span>משלמים רק את הריבית בתקופת הדחייה. הקרן לא יורדת. ההחזר החודשי כמעט לא משתנה. (זה המצב הרגיל של גרייס על הקרן.)</span></span>
+        </label>
+        <label class="radio">
+          <input type="radio" name="deferral" value="full">
+          <span class="txt"><strong>דחייה מלאה</strong>
+            <span>לא משלמים כלום בתקופת הדחייה (קרן + ריבית נדחים). יתרת ההלוואה גדלה, וההחזר החודשי אחרי הדחייה גדל יותר.</span></span>
+        </label>
+      </fieldset>
+
+      <label class="req">נימוקים לבקשה - במילים שלכם</label>
+      <textarea id="reason" rows="3" placeholder="כתבו כאן מדוע אתם מבקשים את הדחייה..."></textarea>
+      <p class="hint">השדה הזה שלכם - כתבו בעצמכם. (נכנס לטופס כפי שתכתבו, עד 3 שורות.)</p>
+
+      <div class="row">
+        <div>
+          <label class="req">יום החיוב החודשי</label>
+          <select id="billing_day"><option value="">בחרו</option><option value="1">1 לחודש</option><option value="10">10 לחודש</option><option value="15">15 לחודש</option></select>
+        </div>
+        <div>
+          <label class="req">מספר חשבון הבנק</label>
+          <input type="tel" id="account_no" inputmode="numeric">
+        </div>
+      </div>
+      <p class="hint">החשבון שממנו יורדת המשכנתא.</p>
+    </div>
+
+    <div class="card">
+      <h2>חתימה</h2>
+      <p class="hint">חתמו עם האצבע או העכבר. כל הלווים חייבים לחתום.</p>
+      <div data-sig="1">
+        <label class="req" id="sig1_label">חתימת לווה 1</label>
+        <canvas class="sigbox" id="sig1"></canvas>
+        <div class="sigrow"><span class="hint">חתמו במסגרת</span><button type="button" class="linklike" data-clear="sig1">נקה חתימה</button></div>
+      </div>
+      <div data-sig="2" class="hide" id="sig2wrap" style="margin-top:10px;">
+        <label class="req" id="sig2_label">חתימת לווה 2</label>
+        <canvas class="sigbox" id="sig2"></canvas>
+        <div class="sigrow"><span class="hint">חתמו במסגרת</span><button type="button" class="linklike" data-clear="sig2">נקה חתימה</button></div>
+      </div>
+    </div>
+
+    <div class="err" id="err"></div>
+    <button type="submit" class="primary" id="genBtn">צור את הטופס להורדה</button>
+  </form>
+
+  <div class="done card" id="done">
+    <div class="check">✓</div>
+    <h2 style="color:var(--ok)">הטופס מוכן!</h2>
+    <p>הקובץ ירד למכשיר. עכשיו שלחו אותו <b>מהמייל שלכם</b> אל הבנק:</p>
+    <div class="sendbox">
+      שלחו את הקובץ אל:<br>
+      <button type="button" class="email" id="copyEmail" title="לחצו להעתקת הכתובת">
+        <span id="emailText">grace@umtb.co.il</span>
+        <span class="copyicon" aria-hidden="true">📋</span>
+      </button>
+      <span class="taphint">לחצו על הכתובת כדי להעתיק אותה</span>
+      <div class="copied" id="copied"></div>
+      <span class="hint">(הכתובת גם מודפסת בראש הטופס. הבנק ישלח אישור במייל חוזר.)</span>
+    </div>
+    <button type="button" class="ghost" id="dl2">הורד שוב</button>
+    <button type="button" class="ghost" id="again">מילוי טופס חדש</button>
+  </div>
+
+</div>
+<script type="module" src="app.js"></script>
+</body>
+</html>
