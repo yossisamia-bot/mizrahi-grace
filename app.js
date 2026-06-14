@@ -41,25 +41,29 @@ const F = {
 
 const hasHeb = s => /[֐-׿]/.test(s);
 
-// logical -> visual (כמו get_display בפייתון)
-function toVisual(text){
+// עיצוב טקסט עברי/מעורב ל-pdf-lib.
+// fontkit הופך כל רצף RTL בצורה "נאיבית" (גם ספרות: "12" הופך ל-"21"). לכן:
+//  1) bidiVisual = הסדר הוויזואלי הנכון לפי bidi (עברית הפוכה, מספרים נשארים LTR).
+//  2) מהפכים אותו - ואז fontkit הופך שוב, וחוזרים לסדר הוויזואלי הנכון.
+// אומת תו-אחר-תו מול get_display של python-bidi (renderer של pdf-lib, 14/06): עברית טהורה,
+// עברית+מספר, ותאריך 10/06 - כולם נכונים. שדות מספריים טהורים עוברים גולמי (fontkit לא הופך LTR).
+// (זה ההפך מ-PyMuPDF ב-fill_grace.py, שם מספיק get_display = bidiVisual בלבד.)
+function bidiVisual(text){
   const lv = bidi.getEmbeddingLevels(text, 'rtl');
   const segs = bidi.getReorderSegments(text, lv);
   const chars = Array.from(text);
-  for(const [start,end] of segs){
-    const slice = chars.slice(start, end+1).reverse();
-    for(let i=start;i<=end;i++) chars[i] = slice[i-start];
-  }
+  for(const [s,e] of segs){ const sl=chars.slice(s,e+1).reverse(); for(let i=s;i<=e;i++) chars[i]=sl[i-s]; }
   return chars.join('');
 }
+function toVisual(text){ return Array.from(bidiVisual(text)).reverse().join(''); }
 
-// גלישת-מילים עברית לפי רוחב (נק')
+// גלישת-מילים לפי רוחב (נק'). הרוחב לא תלוי בסדר התווים, לכן מודדים על הטקסט הגולמי.
 function wrapHeb(text, maxw, font, size){
   const words = text.split(/\s+/).filter(Boolean);
   const lines = []; let cur = '';
   for(const w of words){
     const trial = (cur ? cur+' '+w : w);
-    if(font.widthOfTextAtSize(toVisual(trial), size) <= maxw) cur = trial;
+    if(font.widthOfTextAtSize(trial, size) <= maxw) cur = trial;
     else { if(cur) lines.push(cur); cur = w; }
   }
   if(cur) lines.push(cur);
@@ -88,8 +92,7 @@ async function buildPdf(data){
     text = String(text); if(!text.trim()) return;
     const f = F[key]; const page = pages[f.p];
     let size = sizeArg || 10;
-    const heb = (f.t==='heb' || hasHeb(text));
-    let val = heb ? toVisual(text) : text;
+    const val = hasHeb(text) ? toVisual(text) : text;   // עברית/מעורב -> עיצוב bidi; מספר טהור -> גולמי
     const [x0,y0,x1,y1] = f.r; const avail = x1-x0;
     let w = font.widthOfTextAtSize(val, size);
     while(w > avail && size > 6){ size -= 0.5; w = font.widthOfTextAtSize(val, size); }
